@@ -1,46 +1,47 @@
-import java.util.Objects;
 import java.util.Scanner;
 
 public class M03_UF1_PR01_MauriPol {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-
-        String[] username = new String[10];
-        String[] password = new String[10];
-        int exit;
+        // una array de String infinitas
+        String[] username = new String[1000];
+        String[] password = new String[1000];
+        String exit;
         int option;
-
+        int optionRoot;
         System.out.println("Bienvenido a la aplicacion!");
 
         do {
-            System.out.println("1. Register" + "\n" + "2. Login" + "\n" + "3. Entrar root" + "\n" + "4. Has olvidado la contraseña?" + "\n" + "5. Salir" + "\n" + "Pista: inicia sesion como 'pikachu'");
-
+            System.out.println("1. Register" + "\n" + "2. Login" + "\n" + "3. Entrar root" + "\n" + "4. Has olvidado la contraseña?" + "\n" + "5. Salir" + "\n \n" + "Pista: inicia sesion como 'Pikachu'");
             while (!scanner.hasNextInt()) {
                 System.out.println("Tienes que introducir un numero");
                 scanner.next();
             }
-
             option = scanner.nextInt();
             scanner.nextLine();
 
+            //switch case menu principal
             switch (option) {
 
                 case 1:
                     System.out.println("Introduce tu nombre de usuario: ");
                     String user = scanner.nextLine();
 
-                    while (user.toUpperCase().equals("GUEST") || user.toUpperCase().equals("ROOT")) {
+                    //si les coincideixen els characters ignora si està en majuscula o minuscula
+                    while (user.equalsIgnoreCase("GUEST") || user.equalsIgnoreCase("ROOT")) {
                         System.out.println("El nombre de usuario no puede ser GUEST o ROOT");
                         System.out.println("Introduce tu nombre de usuario: ");
                         user = scanner.nextLine();
                     }
 
                     for (int i = 0; i < username.length; i++) {
+                        //introdueix el usuari a la primera posicio buida
                         if (username[i] == null) {
                             username[i] = user;
                             break;
                         }
+                        //comprova que el usuari no es repeteix
                         while (username[i].equals(user)) {
                             System.out.println("El usuario ya existe");
                             System.out.println("Introduce tu nombre de usuario: ");
@@ -50,14 +51,14 @@ public class M03_UF1_PR01_MauriPol {
 
                     System.out.println("Introduce tu contraseña: ");
                     String pass = scanner.nextLine();
-
+                    //condicions per a una pw segura
                     while (pass.length() < 1 ||
                             !pass.matches(".*[!@#$%&?^*()-+,=<>/].*") ||
                             !pass.matches(".*[0-9].*") ||
                             !pass.matches(".*[A-Z].*") ||
                             !pass.matches(".*[a-z].*")) {
 
-                        System.out.println("La contrtaseña debe tener: Mas de 8 caracteres, un numero, una mayuscula y una minuscula");
+                        System.out.println("La contrtaseña debe tener: Mas de 8 caracteres, un numero, un caracter especial y una mayuscula y una minuscula");
                         System.out.println("Introdece tu contraseña: ");
                         pass = scanner.nextLine();
                     }
@@ -71,31 +72,36 @@ public class M03_UF1_PR01_MauriPol {
                     break;
 
                 case 2:
-                    boolean login = false;
                     boolean pikachuLogin = false;
+                    String user2;
+                    String pass2;
 
                     System.out.println("Introduce tu nombre de usuario: ");
-                    String user2 = scanner.nextLine();
+                    user2 = scanner.nextLine();
+
                     for (int i = 0; i < username.length; i++) {
+                        //comprova que el usuari existeix
                         if (username[i] == null) {
                             System.out.println("El usuario no existe");
                             break;
                         }
-                        if (username[i].equals(user2) && !user2.equals("pikachu")) {
+                        //si hi ha un usuari igual que el input demana la pw
+                        // .equals Compara la cadena de texto contra un objeto. Devolverá true si las cadenas comparadas son iguales. En caso contrario devolverá false.
+                        if (username[i].equals(user2) && !user2.equalsIgnoreCase("pikachu")) {
                             System.out.println("Introduce tu contraseña: ");
-                            String pass2 = scanner.nextLine();
-                            if (Objects.equals(password[i], pass2)) {
+                            pass2 = scanner.nextLine();
+                            //compaara que la pw es igual a la introduida
+                            if (password[i].equals(pass2)) {
                                 System.out.println("Bienvenido " + username[i]);
-                                login = true;
                             } else {
                                 System.out.println("Contraseña incorrecta");
                             }
                             break;
 
-                        } else if (username[i].equals(user2) && user2.equals("pikachu")) {
+                        } else if (username[i].equalsIgnoreCase("pikachu")) {
                             System.out.println("Introduce tu contraseña: ");
-                            String pass2 = scanner.nextLine();
-                            if (Objects.equals(password[i], pass2)) {
+                            pass2 = scanner.nextLine();
+                            if (password[i].equals(pass2)) {
                                 pikachuLogin = true;
                             } else {
                                 System.out.println("Contraseña incorrecta");
@@ -104,105 +110,104 @@ public class M03_UF1_PR01_MauriPol {
                         }
                     }
                     if (pikachuLogin) {
-                        int pikachuHealth = 100;
-                        int charizardHealth = 100;
-                        int pikachuAttack1 = 20;
-                        int pikachuAttack2 = 30;
-                        int pikachuAttack3 = 60;
-                        int charizardAttack1 = 20;
-                        int charizardAttack2 = 30;
-                        int charizardAttack3 = 60;
-                        int random2 = 0;
-                        int ataques = 0;
-                        boolean tirada = true;
+                        int pikachuHealth = 100; //vida de pikachu
+                        int charizardHealth = 100; //vida de charizard
+                        int attack1 = 20; //ataque 1
+                        int attack2 = 30; //ataque 2
+                        int attack3 = 60; //ataque 3
+                        int random; //posibilitat "random" de que un atac falli
+                        int attackSelect; //ataque seleccionat
+                        boolean thrown = true; //turno
 
                         System.out.println("Bienvenido " + user2 + " acabas de entrar al combate mas epico de toda tu vida \n" + "Pikachu vs Charizard \n");
 
                         while (pikachuHealth > 0 && charizardHealth > 0) {
 
-                            while (tirada) {
+                            while (thrown) {
                                 System.out.println("Pikachu ataca: \n");
                                 System.out.println("Que ataque quieres usar? \n");
                                 System.out.println("1. Ataque rapido");
                                 System.out.println("2. Ataque relampago");
                                 System.out.println("3. Ataque bola voltio");
 
-                                ataques = scanner.nextInt();
+                                attackSelect = scanner.nextInt();
 
-                                switch (ataques) {
+                                switch (attackSelect) {
                                     case 1:
-                                        charizardHealth = charizardHealth - pikachuAttack1;
+                                        charizardHealth = charizardHealth - attack1;
                                         break;
                                     case 2:
-                                        random2 = (int) (Math.random() * 5 + 1);
-                                        if (random2 == 1) {
+                                        random = (int) (Math.random() * 5 + 1);
+                                        if (random == 1) {
                                             System.out.println("El ataque falló");
                                         } else {
-                                            charizardHealth = charizardHealth - pikachuAttack2;
+                                            charizardHealth = charizardHealth - attack2;
                                         }
                                         break;
                                     case 3:
-                                        random2 = (int) (Math.random() * 2 + 1);
-                                        if (random2 == 1) {
+                                        random = (int) (Math.random() * 2 + 1);
+                                        if (random == 1) {
                                             System.out.println("El ataque falló");
                                         } else {
-                                            charizardHealth = charizardHealth - pikachuAttack3;
+                                            charizardHealth = charizardHealth - attack3;
                                         }
                                         break;
                                 }
-
-                                System.out.println("Charizard tiene " + charizardHealth + " de vida");
-                                tirada = false;
+                                if (charizardHealth > 0) {
+                                    System.out.println("Charizard tiene " + charizardHealth + " de vida");
+                                } else {
+                                    System.out.println("Charizard ha muerto, gana Pikachu");
+                                } thrown = false;
                             }
 
-                            while (charizardHealth > 0 && !tirada) {
+                            while (charizardHealth > 0 && !thrown) {
                                 System.out.println("Charizard ataca");
                                 System.out.println("Que ataque quieres usar?");
                                 System.out.println("1. Mordisco");
                                 System.out.println("2. Ataque ala");
                                 System.out.println("3. Ataque fuego");
 
-                                ataques = scanner.nextInt();
+                                attackSelect = scanner.nextInt();
 
-                                switch (ataques) {
+                                switch (attackSelect) {
                                     case 1:
-                                        pikachuHealth = pikachuHealth - charizardAttack1;
+                                        pikachuHealth = pikachuHealth - attack1;
                                         break;
                                     case 2:
-                                        random2 = (int) (Math.random() * 5 + 1);
-                                        if (random2 == 1) {
+                                        random = (int) (Math.random() * 5 + 1);
+                                        if (random == 1) {
                                             System.out.println("El ataque fallo");
                                         } else {
-                                            pikachuHealth = pikachuHealth - charizardAttack2;
+                                            pikachuHealth = pikachuHealth - attack2;
                                         }
                                         break;
                                     case 3:
-                                        random2 = (int) (Math.random() * 2 + 1);
-                                        if (random2 == 1) {
+                                        random = (int) (Math.random() * 2 + 1);
+                                        if (random == 1) {
                                             System.out.println("El ataque fallo");
                                         } else {
-                                            pikachuHealth = pikachuHealth - charizardAttack3;
+                                            pikachuHealth = pikachuHealth - attack3;
                                         }
                                         break;
                                 }
-
-                                System.out.println("Pikachu tiene " + pikachuHealth + " de vida");
-                                tirada = true;
+                                if (pikachuHealth > 0) {
+                                    System.out.println("Pikachu tiene " + pikachuHealth + " de vida");
+                                } else {
+                                    System.out.println("Pikachu ha muerto, gana Charizard");
+                                } thrown = true;
                             }
-
                         }
                     }
-
                     break;
 
                 case 3:
                     String root = "root";
                     System.out.println("Inroduce la contraseña de root: ");
-                    String passRoot = scanner.nextLine();
-                    if (passRoot.equals(root)) {
+                    String pswRoot = scanner.nextLine();
+                    if (pswRoot.equals(root)) {
                         System.out.println("Bienvenido root");
                         System.out.println("1. Mostrar usuarios" + "\n" + "2. Mostrar contraseñas" + "\n" + "3. Cambiar nombre de usuario" + "\n" + "4. Cambiar contraseña" + "\n" + "5. Eliminar un usuario" + "\n" + "6. Salir");
-                        int optionRoot = scanner.nextInt();
+                        optionRoot = scanner.nextInt();
                         scanner.nextLine();
 
                         switch (optionRoot) {
@@ -216,9 +221,10 @@ public class M03_UF1_PR01_MauriPol {
                                     count1++;
                                 }
                                 System.out.println("Si quiere salir pulse 1");
-                                exit = scanner.nextInt();
-                                if (exit == 1) {
-                                    break;
+                                exit = scanner.nextLine();
+                                while (!exit.equals("1")) {
+                                    System.out.println("Opcion invalida, pulse 1 para salir: ");
+                                    exit = scanner.nextLine();
                                 }
                                 break;
 
@@ -232,9 +238,10 @@ public class M03_UF1_PR01_MauriPol {
                                     count2++;
                                 }
                                 System.out.println("Si quiere salir pulse 1");
-                                exit = scanner.nextInt();
-                                if (exit == 1) {
-                                    break;
+                                exit = scanner.nextLine();
+                                while (!exit.equals("1")) {
+                                    System.out.println("Opcion invalida, pulse 1 para salir: ");
+                                    exit = scanner.nextLine();
                                 }
                                 break;
 
@@ -246,6 +253,7 @@ public class M03_UF1_PR01_MauriPol {
                                         System.out.println("El usuario no existe");
                                         break;
                                     }
+
                                     if (username[i].equals(userChange)) {
                                         System.out.println("Introduce el nuevo nombre de usuario: ");
                                         String userChange2 = scanner.nextLine();
@@ -255,11 +263,13 @@ public class M03_UF1_PR01_MauriPol {
                                     }
                                 }
                                 System.out.println("Si quiere salir pulse 1");
-                                exit = scanner.nextInt();
-                                if (exit == 1) {
-                                    break;
+                                exit = scanner.nextLine();
+                                while (!exit.equals("1")) {
+                                    System.out.println("Opcion invalida, pulse 1 para salir: ");
+                                    exit = scanner.nextLine();
                                 }
                                 break;
+
 
                             case 4:
                                 System.out.println("Introduce el nombre de usuario del que quieres cambiar la contraseña: ");
@@ -278,9 +288,10 @@ public class M03_UF1_PR01_MauriPol {
                                     }
                                 }
                                 System.out.println("Si quiere salir pulse 1");
-                                exit = scanner.nextInt();
-                                if (exit == 1) {
-                                    break;
+                                exit = scanner.nextLine();
+                                while (!exit.equals("1")) {
+                                    System.out.println("Opcion invalida, pulse 1 para salir: ");
+                                    exit = scanner.nextLine();
                                 }
                                 break;
 
@@ -304,22 +315,19 @@ public class M03_UF1_PR01_MauriPol {
                                     }
                                 }
                                 System.out.println("Si quiere salir pulse 1");
-                                exit = scanner.nextInt();
-                                if (exit == 1) {
-                                    break;
+                                exit = scanner.nextLine();
+                                while (!exit.equals("1")) {
+                                    System.out.println("Opcion invalida, pulse 1 para salir: ");
+                                    exit = scanner.nextLine();
                                 }
                                 break;
-
                             case 6:
                                 System.out.println("Saliendo...");
                                 break;
                         }
-
-
                     } else {
                         System.out.println("Contraseña incorrecta");
                     }
-
                     break;
 
                 case 4:
@@ -347,4 +355,5 @@ public class M03_UF1_PR01_MauriPol {
         } while (option != 6);
     }
 }
+
 
